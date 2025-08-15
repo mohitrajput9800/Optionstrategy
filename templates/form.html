@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-/* Reset & base */
 body {
   margin: 0;
   padding: 0;
@@ -13,19 +12,16 @@ body {
   background: linear-gradient(135deg, #aee8ff 0%, #f5fcff 100%);
   font-family: 'Inter', 'Segoe UI', 'Roboto', Arial, sans-serif;
 }
-
-/* Main Card */
 .box {
   max-width: 460px;
   background: rgba(255,255,255,0.97);
   margin: 60px auto 0 auto;
   border-radius: 22px;
   box-shadow: 0 8px 32px rgba(67,202,255,0.18), 0 2px 30px #1bd0ff18;
-  padding: 36px 27px 36px 27px;
+  padding: 36px 27px 40px 27px;
   position: relative;
   overflow: hidden;
   z-index: 1;
-  /* card glass glow */
 }
 .box:after {
   content: "Rajput";
@@ -44,8 +40,6 @@ body {
   filter: blur(0.4px);
   text-shadow: 0 5px 24px #8beeff11, 2px 3px 11px #ffe;
 }
-
-/* Main header */
 h2 {
   font-size: 31px;
   font-weight: 900;
@@ -55,8 +49,6 @@ h2 {
   margin-bottom: 36px;
   text-shadow: 0 2px 16px #56e0fc15;
 }
-
-/* Mode buttons */
 .button-row#modebuttons {
   margin-bottom: 26px;
 }
@@ -85,8 +77,6 @@ h2 {
   transform: scale(1.07);
 }
 .btnmode:last-child { margin-right: 0; }
-
-/* Form Layout */
 .form-row { display: flex; flex-wrap: wrap; gap: 20px 12px; margin-bottom: 13px;}
 .form-col {flex: 1 1 44%; min-width: 160px; display: flex; flex-direction: column;}
 label {
@@ -125,8 +115,6 @@ input:invalid { box-shadow: 0 0 0 3px #ff9f522a; }
 .note { font-size: 13.4px; color: #75b5e2; font-style: italic; font-weight: 470; margin-left: 6px; }
 ::-webkit-scrollbar { width: 7px; background: #e7f3fa; }
 ::-webkit-scrollbar-thumb { background: #4bb4fc61; border-radius: 26px; }
-
-/* Buttons in form */
 .button-row:not(#modebuttons) {
   margin-top: 31px;
   margin-bottom: 11px;
@@ -153,13 +141,11 @@ button[type="submit"]:hover {
   box-shadow: 0 7px 22px #4df6bc13;
   transform: translateY(-1.5px) scale(1.015);
 }
-
-/* Responsive */
 @media (max-width: 650px) {
-  .box { max-width: 99vw; padding: 10px 2vw 18px 2vw;}
-  .form-row { flex-direction: column; gap: 4px 0; }
+  .box { max-width: 99vw; padding: 8px 2vw 16px 2vw;}
+  .form-row { flex-direction: column; gap: 3px 0; }
   .form-col { min-width: 0; }
-  .button-row { flex-direction:column; align-items:stretch; gap:9px;}
+  .button-row { flex-direction:column; align-items:stretch; gap:10px;}
   button, .btnmode, button[type='submit'] { width: 100%; }
 }
   </style>
