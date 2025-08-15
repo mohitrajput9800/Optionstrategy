@@ -9,7 +9,6 @@ def index():
 
 @app.route("/generate", methods=["POST"])
 def generate():
-    # 1. Get parameters
     ratio = request.form.get("ratio", "1.5.4")
     script = request.form.get("script", "NIFTY").upper()
     expiry_raw = request.form.get("expiry", "")
@@ -68,19 +67,18 @@ def generate():
         gapValues = [int(x.strip()) for x in legGap_input.split(",") if x.strip().isdigit() and int(x.strip()) > 0]
     except:
         gapValues = [250]
-    if not gapValues: gapValues = 
+    if not gapValues:
+        gapValues =    # THIS IS THE FIX!
     blockQtys = [25000, 20000]
     stgCode = get_stg_code()
     baseParts = [b for b in buySellPattern.split(".") if b]
     baseCount = len(baseParts) if baseParts else 1
 
-    # 2. Prepare CSV header
     headerLine = "#PID,cost,bcmp,scmp,flp,stgcode,script,lotsize,itype,expiry,otype,stkprice,ratio,buysell,pnAdd,pnMulti,bsoq,bqty,bprice,sprice,sqty,ssoq,btrQty,strQty,gap,ticksize,orderDepth,priceDepth,thshqty,allowedBiddepth,allowedSlippage,tradeGear,shortflag,isBidding,marketOrderRetries,marketOrLimitOrder,isBestbid,unhedgedActionType,TERActionType,BidWaitingType,param2,param3,param4,param5,param6,param7,param01,param02,param03,param04,param05,param06,param07,param08,param09,param10,param11,param12,param13,param14,param15,param16,param17,param18,param19,param20,param21,param22,param23,param24,param25,param26,param27,param28,param29,param30,param31,param32,param33,param34,param35,param36,param37,param38,param39,param40,param301,param302,param303,param304,param305,param306,param307,param308,param309,param310,param311,param312,param313,param314,param315,param316,param317,param318,param319,param320,param321,param322,param323,param324,param325,param326,param327,param328,param329,param330,param331,param332,param333,param334,param335,param336,param337,param338,param339,param340"
     headers = headerLine.split(",")
     lines = [headerLine]
     pid = 1
 
-    # 3. Fill All Data Rows (CE & PE both for each gap/qty)
     for gap in gapValues:
         for qty in blockQtys:
             otypeLegs_CE = "|".join(["CE"] * legCount)
@@ -93,35 +91,47 @@ def generate():
                 row = ['0'] * len(headers)
                 prices = [firstStrikeCE + i * strikeStep + j * gap for j in range(legCount)]
                 row[0] = str(pid); pid += 1
-                row[2] = str(stgCode); row[3] = script; row[4] = lotSize
+                row[2] = str(stgCode)
+                row[3] = script
+                row[4] = lotSize
                 row[5] = '-'.join(['OPTIDX'] * legCount)
-                row[6] = expStr; row[7] = otypeLegs_CE; row[8] = "|".join(map(str, prices))
-                row[9] = ratio; row[10] = buySellStr; row[11] = "1"
+                row[6] = expStr
+                row[7] = otypeLegs_CE
+                row[8] = "|".join(map(str, prices))
+                row[9] = ratio
+                row[10] = buySellStr
+                row[11] = "1"
                 row[12] = "0"; row[13] = "0"; row = "10"; row = "2"; row = "2"; row = "5"
-                row = "50" if mode == "IOC" else "200"   # param02
+                row = "50" if mode == "IOC" else "200"
                 row = "2"; row = "1"; row = "0" if mode == "IOC" else "1"
                 row = "5"; row = "2"; row = "1"; row = "500"; row = "60"
-                row = "50" if mode == "IOC" else "800"   # allowedSlippage
+                row = "50" if mode == "IOC" else "800"
                 row = "100"; row = "200"; row = "2575"; row = "60"; row = "100"
                 row = "200"; row = "100"; row = "100"; row = "10"; row = "1"
                 row = "1999"; row = "30"; row = "10"; row = "101"
-                row = "80" if mode == "IOC" else "0"      # thshqty
+                row = "80" if mode == "IOC" else "0"
                 row = str(gap)
                 lines.append(",".join(row))
             # ---- PE Rows ----
             for i in range(totStrikes):
                 row = ['0'] * len(headers)
                 prices = [firstStrikePE - i * strikeStep - j * gap for j in range(legCount)]
-                row = str(pid); pid += 1
-                row[2] = str(stgCode); row[3] = script; row[4] = lotSize
+                row[0] = str(pid); pid += 1
+                row[2] = str(stgCode)
+                row[3] = script
+                row[4] = lotSize
                 row[5] = '-'.join(['OPTIDX'] * legCount)
-                row[6] = expStr; row[7] = otypeLegs_PE; row[8] = "|".join(map(str, prices))
-                row[9] = ratio; row[10] = buySellStr; row[11] = "1"
+                row[6] = expStr
+                row[7] = otypeLegs_PE
+                row[8] = "|".join(map(str, prices))
+                row[9] = ratio
+                row[10] = buySellStr
+                row[11] = "1"
                 row[12] = "0"; row[13] = "0"; row = "10"; row = "2"; row = "2"; row = "5"
-                row = "50" if mode == "IOC" else "200"   # param02
+                row = "50" if mode == "IOC" else "200"
                 row = "2"; row = "1"; row = "0" if mode == "IOC" else "1"
                 row = "5"; row = "2"; row = "1"; row = "500"; row = "60"
-                row = "50" if mode == "IOC" else "800"   # allowedSlippage
+                row = "50" if mode == "IOC" else "800"
                 row = "100"; row = "200"; row = "2575"; row = "60"; row = "100"
                 row = "200"; row = "100"; row = "100"; row = "10"; row = "1"
                 row = "1999"; row = "30"; row = "10"; row = "101"
