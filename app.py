@@ -25,6 +25,25 @@ def generate():
     lotSize = request.form.get('lotSize', '75')
     mode = request.form.get('mode', '8184')  # '8184', '7155', or 'IOC'
 
+    # CALCULATE lotSize (do not trust user-provided value)
+    legsArr = ratio.split('.')
+    legCount = len(legsArr)
+    if script == "BANKNIFTY":
+        lot_per_script = 35
+    elif script == "SENSEX":
+        lot_per_script = 20
+    elif script == "MIDCAP":
+        lot_per_script = 140
+    elif script == "FINNIFTY":
+        lot_per_script = 65
+    else:
+        lot_per_script = 75
+
+    if mode == "7155":
+        lotSize = "|".join([str(lot_per_script)] * legCount)
+    else:
+        lotSize = str(lot_per_script)
+
     # Helper functions
     def formatExpiry(dateStr):
         from datetime import datetime
@@ -189,4 +208,5 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
