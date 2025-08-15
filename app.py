@@ -69,15 +69,14 @@ def generate():
     except Exception:
         lots = [75] * legCount
 
-    for gap in gapValues:
-        for qty in blockQtys:
-            # -- Calls CE
-            otypeLegs = '|'.join(['CE'] * legCount)
-            expStr = '|'.join([expiry] * legCount)
-            buySellStr = '.'.join([baseParts[i % baseCount] for i in range(legCount)])
-            for i in range(totStrikes):
-                prices = [firstStrikeCE + i * strikeStep + j * gap for j in range(legCount)]
-                row = ['0'] * len(headers)
+        for gap in gapValues:
+        # -- Calls CE
+        otypeLegs = '|'.join(['CE'] * legCount)
+        expStr = '|'.join([expiry] * legCount)
+        buySellStr = '.'.join([baseParts[i % baseCount] for i in range(legCount)])
+        for i in range(totStrikes):
+            prices = [firstStrikeCE + i * strikeStep + j * gap for j in range(legCount)]
+            row = ['0'] * len(headers)
                 row[0] = str(pid)
                 pid += 1
                 row[5] = str(stgCode)
@@ -124,12 +123,12 @@ def generate():
                 row[24] = str(gap)
                 rows.append(','.join(row))
             # -- Calls PE
-            otypeLegs = '|'.join(['PE'] * legCount)
-            expStr = '|'.join([expiry] * legCount)
-            buySellStr = '.'.join([baseParts[i % baseCount] for i in range(legCount)])
-            for i in range(totStrikes):
-                prices = [firstStrikePE - i * strikeStep - j * gap for j in range(legCount)]
-                row = ['0'] * len(headers)
+              otypeLegs = '|'.join(['PE'] * legCount)
+        expStr = '|'.join([expiry] * legCount)
+        buySellStr = '.'.join([baseParts[i % baseCount] for i in range(legCount)])
+        for i in range(totStrikes):
+            prices = [firstStrikePE - i * strikeStep - j * gap for j in range(legCount)]
+            row = ['0'] * len(headers)
                 row[0] = str(pid)
                 pid += 1
                 row[5] = str(stgCode)
@@ -189,3 +188,4 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
