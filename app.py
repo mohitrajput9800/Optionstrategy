@@ -69,13 +69,14 @@ def generate():
     except Exception:
         lots = [75] * legCount
 
-       for gap in gapValues:
-        # -- Calls CE
-        otypeLegs = '|'.join(['CE'] * legCount)
-        expStr = '|'.join([expiry] * legCount)
-        buySellStr = '.'.join([baseParts[i % baseCount] for i in range(legCount)])
-        for i in range(totStrikes):
-            prices = [firstStrikeCE + i * strikeStep + j * gap for j in range(legCount)]
+    for gap in gapValues:
+        for qty in blockQtys:
+            # -- Calls CE
+            otypeLegs = '|'.join(['CE'] * legCount)
+            expStr = '|'.join([expiry] * legCount)
+            buySellStr = '.'.join([baseParts[i % baseCount] for i in range(legCount)])
+            for i in range(totStrikes):
+                prices = [firstStrikeCE + i * strikeStep + j * gap for j in range(legCount)]
                 row = ['0'] * len(headers)
                 row[0] = str(pid)
                 pid += 1
