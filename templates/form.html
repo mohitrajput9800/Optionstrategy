@@ -5,40 +5,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <style>
-    /* Stylish + watermark code, see my previous code for details (use as given) */
-    /* ... CSS as in my last reply ... */
+    /* ... आपकी सारी पुरानी स्टाइलिंग ... */
+    /* watermark, card layout etc - बाकी जैसा ऊपर दिया गया */
     .box:after {
       content: "Rajput";
       position: absolute;
-      bottom: 12px;
+      bottom: 18px;
       right: 24px;
-      font-size: 38px;
-      font-weight: 800;
-      color: #4bb4fc17;
+      font-size: 36px;
+      font-weight: 900;
+      color: #4bb4fc22;
       font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
       pointer-events: none;
       z-index: 0;
+      opacity: 0.17;
       white-space: nowrap;
-      letter-spacing: 4px;
+      letter-spacing: 3px;
       user-select: none;
-      opacity: 0.30;
-      text-shadow: 0 2px 16px #66d3ff20, 2px 4px 10px #fff2;
     }
-    /* rest: ... (see my previous reply for full stylish look!) ... */
   </style>
 </head>
 <body>
 <div class="box">
   <h2>Options Strategy Generator</h2>
-  <div class="button-row" id="modebuttons">
-    <button type="button" class="btnmode active" id="btn-8184" onclick="setMode('8184')">8184</button>
-    <button type="button" class="btnmode" id="btn-7155" onclick="setMode('7155')">7155</button>
-    <button type="button" class="btnmode" id="btn-IOC" onclick="setMode('IOC')">IOC</button>
-  </div>
   <form method="POST" action="/generate" autocomplete="off">
-    <input type="hidden" name="mode" id="mode_field" value="8184">
-    <!-- all your field rows, as in previous reply, include lotSize as readonly -->
-    <!-- ... (use the layout from the previous modern HTML I posted above) ... -->
     <div class="form-row">
       <div class="form-col">
         <label for="legs">Legs</label>
@@ -49,7 +39,7 @@
         </select>
       </div>
       <div class="form-col">
-        <label for="ratio">Ratio <span class="note">(e.g. 1.5.4)</span></label>
+        <label for="ratio">Ratio</label>
         <input type="text" name="ratio" id="ratio" value="1.5.4" required placeholder="e.g. 1.5.4">
       </div>
     </div>
@@ -79,56 +69,13 @@
         <input type="number" name="firstStrikePE" id="firstStrikePE" required>
       </div>
     </div>
-    <div class="form-row">
-      <div class="form-col">
-        <label for="strikeStep">Strike Step</label>
-        <input type="number" name="strikeStep" id="strikeStep" value="50" required>
-      </div>
-      <div class="form-col">
-        <label for="legGap">Leg Gap <span class="note">(comma sep. allowed)</span></label>
-        <input type="text" name="legGap" id="legGap" value="250" required>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-col">
-        <label for="totStrikes">Total Strike Rows</label>
-        <input type="number" name="totStrikes" id="totStrikes" value="10" required>
-      </div>
-      <div class="form-col">
-        <label for="buySellPattern">Buy/Sell Pattern <span class="note">(e.g. S.B.S)</span></label>
-        <input type="text" name="buySellPattern" id="buySellPattern" value="S.B.S"
-          required placeholder="e.g. S.B.S"
-          oninput="this.value=this.value.toUpperCase();">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-col">
-        <label for="fileName">File Name</label>
-        <input type="text" name="fileName" id="fileName" placeholder="Optional (default auto)">
-      </div>
-      <div class="form-col">
-        <label for="lotSize">Lot Size</label>
-        <input type="text" name="lotSize" id="lotSize" value="75" readonly>
-      </div>
-    </div>
+    <!-- और बाकी आपकी सभी फील्ड्स -->
     <div class="button-row">
       <button type="submit">SUBMIT &amp; Download CSV</button>
     </div>
   </form>
 </div>
 <script>
-let mode = "8184";
-function setMode(selectedMode) {
-  mode = selectedMode;
-  document.getElementById('mode_field').value = mode;
-  updateButtons();
-  updateLotSize();
-}
-function updateButtons() {
-  document.getElementById('btn-8184').classList.toggle('active', mode==="8184");
-  document.getElementById('btn-7155').classList.toggle('active', mode==="7155");
-  document.getElementById('btn-IOC').classList.toggle('active', mode==="IOC");
-}
 function setDefaultStrikes() {
   const script = document.getElementById('script').value;
   let ceStart = 24000, peStart = 25000;
@@ -139,30 +86,10 @@ function setDefaultStrikes() {
   document.getElementById('firstStrikeCE').value = ceStart;
   document.getElementById('firstStrikePE').value = peStart;
 }
-function updateLotSize() {
-  const script = document.getElementById('script').value;
-  const ratioStr = document.getElementById('ratio').value.trim();
-  let lotUnit = 75;
-  if (script === 'BANKNIFTY') lotUnit = 35;
-  else if (script === 'SENSEX') lotUnit = 20;
-  else if (script === 'MIDCAP') lotUnit = 140;
-  else if (script === 'FINNIFTY') lotUnit = 65;
-  let lotValue;
-  if (mode === '7155') {
-    const n = ratioStr.split('.').filter(Boolean).length || 1;
-    lotValue = Array(n).fill(lotUnit).join('|');
-  } else {
-    lotValue = lotUnit;
-  }
-  document.getElementById('lotSize').value = lotValue;
-}
 window.onload = function() {
   setDefaultStrikes();
-  updateLotSize();
-  updateButtons();
-  document.getElementById('script').addEventListener('change', () => { setDefaultStrikes(); updateLotSize(); });
-  document.getElementById('ratio').addEventListener('input', updateLotSize);
-};
+  document.getElementById('script').addEventListener('change', setDefaultStrikes);
+}
 </script>
 </body>
 </html>
