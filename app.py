@@ -5,10 +5,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    # This requires "form.html" in your templates folder
     return render_template('form.html')
 
 @app.route('/generate', methods=['POST'])
 def generate():
+    # Collect form data
     legs = int(request.form.get('legs', 3))
     ratio = request.form.get('ratio', '1.5.4')
     script = request.form.get('script', 'NIFTY').upper()
@@ -20,9 +22,10 @@ def generate():
     totStrikes = int(request.form.get('totStrikes', 10))
     buySellPattern = request.form.get('buySellPattern', 'S.B.S').upper()
     fileName = request.form.get('fileName') or f"{script}-strategy.csv"
-    mode = request.form.get('mode', '8184')
+    lotSize = request.form.get('lotSize', '75')
+    mode = request.form.get('mode', '8184')  # '8184', '7155', or 'IOC'
 
-    # Lot size fully backend controlled:
+    # CALCULATE lotSize (do not trust user-provided value)
     legsArr = ratio.split('.')
     legCount = len(legsArr)
     if script == "BANKNIFTY":
@@ -35,11 +38,13 @@ def generate():
         lot_per_script = 65
     else:
         lot_per_script = 75
+
     if mode == "7155":
         lotSize = "|".join([str(lot_per_script)] * legCount)
     else:
         lotSize = str(lot_per_script)
 
+    # Helper functions
     def formatExpiry(dateStr):
         from datetime import datetime
         if not dateStr:
@@ -67,15 +72,17 @@ def generate():
     gapValues = [int(x.strip()) for x in legGap_input.split(',') if x.strip().isdigit() and int(x.strip()) > 0]
     if not gapValues:
         gapValues = [250]
+    blockQtys = [0]
 
     headerLine = "#PID,cost,bcmp,scmp,flp,stgcode,script,lotsize,itype,expiry,otype,stkprice,ratio,buysell,pnAdd,pnMulti,bsoq,bqty,bprice,sprice,sqty,ssoq,btrQty,strQty,gap,ticksize,orderDepth,priceDepth,thshqty,allowedBiddepth,allowedSlippage,tradeGear,shortflag,isBidding,marketOrderRetries,marketOrLimitOrder,isBestbid,unhedgedActionType,TERActionType,BidWaitingType,param2,param3,param4,param5,param6,param7,param01,param02,param03,param04,param05,param06,param07,param08,param09,param10,param11,param12,param13,param14,param15,param16,param17,param18,param19,param20,param21,param22,param23,param24,param25,param26,param27,param28,param29,param30,param31,param32,param33,param34,param35,param36,param37,param38,param39,param40,param301,param302,param303,param304,param305,param306,param307,param308,param309,param310,param311,param312,param313,param314,param315,param316,param317,param318,param319,param320,param321,param322,param323,param324,param325,param326,param327,param328,param329,param330,param331,param332,param333,param334,param335,param336,param337,param338,param339,param340"
     headers = headerLine.split(",")
     rows = [headerLine]
     pid = 1
     stgCode = getStgCode(ratio)
+    legsArr = ratio.split('.')
+    legCount = len(legsArr)
     baseParts = buySellPattern.split('.')
     baseCount = len(baseParts)
-
     try:
         lots = [int(x) for x in lotSize.split('|')] if '|' in lotSize else [int(lotSize)] * legCount
     except Exception:
