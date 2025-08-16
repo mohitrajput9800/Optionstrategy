@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
   <style>
     body {
-      background: linear-gradient(120deg, #f3fbff 0%, #d5f3e8 100%);
+      background: linear-gradient(120deg, #d7f9ff 0%, #a6f6cb 55%, #4fa7ee 100%);
       font-family: 'Inter', Arial, sans-serif;
       margin: 0;
       min-height: 100vh;
@@ -15,25 +15,55 @@
       position: relative;
       overflow-x: hidden;
     }
-    .watermark {
+    .watermark-bg {
       position: fixed;
-      left: 0; top: 0;
-      width: 100vw; height: 100vh;
+      inset: 0;
       z-index: 0;
       pointer-events: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 7vw;
-      color: #117883;
-      opacity: 0.5;
-      font-weight: 900;
-      font-family: 'Inter', Arial, sans-serif;
-      letter-spacing: 0.27em;
       user-select: none;
+      opacity: 0.13;
+      background: repeating-linear-gradient(
+        60deg,
+        transparent 0px 120px,
+        #b2e2ea0d 120px 128px,
+        transparent 128px 170px
+      );
+    }
+    .watermark-bg::before {
+      content: "Rajput   Rajput   Rajput   Rajput   Rajput   Rajput   Rajput ";
+      position: absolute;
+      top: 28px; left: 0; right: 0;
+      font-size: 2.1rem;
+      font-weight: 800;
+      font-family: 'Inter', Segoe UI, Arial, sans-serif;
+      text-align: center;
+      letter-spacing: 2em;
+      opacity: 0.21;
       white-space: nowrap;
-      transform: rotate(-20deg) scale(1.2);
-      text-shadow: 1px 2px 16px #d4eee3;
+      background: linear-gradient(90deg,#43e7bc 0%, #36aebb 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      pointer-events: none;
+      user-select: none;
+    }
+    .watermark-bg::after {
+      content: "Rajput   Rajput   Rajput   Rajput   Rajput";
+      position: absolute;
+      bottom: 28px; left: 0; right: 0;
+      font-size: 1.7rem;
+      font-weight: 700;
+      font-family: 'Inter', Segoe UI, Arial, sans-serif;
+      text-align: center;
+      letter-spacing: 1.5em;
+      opacity: 0.14;
+      white-space: nowrap;
+      background: linear-gradient(90deg,#b9efdb 5%,#2bb2f9 95%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      pointer-events: none;
+      user-select: none;
     }
     header {
       text-align: center;
@@ -49,6 +79,9 @@
       color: #077880;
       letter-spacing: 1px;
       font-weight: 700;
+      background: linear-gradient(90deg,#43e7bc 40%, #36aebb 100%);
+      background-clip:text;
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
     }
     header p {
       font-size: 1.1rem;
@@ -111,7 +144,7 @@
       margin-top: 32px;
     }
     button {
-      background: linear-gradient(90deg, #44e7bc, #47bbff);
+      background: linear-gradient(90deg, #43e7bc 40%, #36aebb 100%);
       color: #fff;
       font-size: 1.18rem;
       font-family: inherit;
@@ -125,7 +158,7 @@
       transition: background 0.18s, transform 0.13s;
     }
     button:hover {
-      background: linear-gradient(90deg, #3fd4ae, #2bb2f9);
+      background: linear-gradient(90deg, #41d8be 30%, #158ced 90%);
       transform: translateY(-2px) scale(1.025);
     }
     .note {
@@ -136,12 +169,14 @@
     footer {
       text-align: center;
       font-size: 0.97rem;
-      color: #47899a;
+      background: linear-gradient(90deg,#4fa7ee 0%,#96f1cd 100%);
+      color: #1c464b;
       margin-top: 42px;
       letter-spacing: 0.3px;
       font-weight: 400;
       z-index: 2;
       position: relative;
+      padding:10px 0;
     }
     .brand {
       font-weight: 700;
@@ -151,18 +186,17 @@
     }
     @media (max-width: 700px){
       .container{padding:18px 2vw;}
-      .watermark {font-size: 13vw;}
+      .watermark-bg::before, .watermark-bg::after {font-size:1.2rem;letter-spacing:1em;}
     }
-    @media (max-width: 550px){
-      .row{flex-direction:column;}
-      .container{padding:12px 0;}
+    @media (max-width: 500px){
+      .container{padding:5px 0;}
       header h1{font-size:2rem;}
-      .watermark {font-size: 18vw;}
+      .watermark-bg::before, .watermark-bg::after {font-size:0.82rem;}
     }
   </style>
 </head>
 <body>
-<div class="watermark">Rajput</div>
+<div class="watermark-bg"></div>
 <header>
   <h1>Options Strategy Generator</h1>
   <p>Create robust option strategies and download them as a CSV instantly.</p>
@@ -170,7 +204,6 @@
 <div class="container">
   <form method="post" action="/generate">
     <div class="note">Fields auto-update for your selected script and mode.</div>
-
     <div class="row">
       <div class="col">
         <label for="legs">Legs</label>
@@ -257,10 +290,9 @@
   </form>
 </div>
 <footer>
-  &copy; 2025 <span class="brand">Options Strategy Generator</span>. Clean design by Mohit Rajput.
+  &copy; 2025 <span class="brand">Options Strategy Generator</span>. Clean design by Perplexity AI.
 </footer>
 <script>
-// Auto-fills strike fields based on script selection
 function updateStrikeFields() {
     const script = document.getElementById('script').value;
     let ce = 24100, pe = 25400;
@@ -296,4 +328,3 @@ window.onload = function() {
 </script>
 </body>
 </html>
-
