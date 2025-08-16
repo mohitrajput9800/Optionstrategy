@@ -1,115 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Options Strategy Generator</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <style>
-        body { font-family: Arial, sans-serif; background: #f0f6fa; }
-        .container { max-width: 560px; margin: 40px auto; background: #fff; border-radius: 18px; box-shadow: 0 4px 20px #acdcf633; padding: 34px 32px; }
-        h1 { color: #2489c7; text-align: center; margin-bottom: 25px; }
-        .row { display: flex; gap: 14px; margin-bottom: 15px; flex-wrap: wrap;}
-        .col { flex: 1; min-width: 200px; display: flex; flex-direction: column;}
-        label { color: #2994dd; font-weight: 700; margin-bottom: 4px;}
-        input, select { font-size: 15px; padding: 9px 10px; border-radius: 7px; border: 1px solid #bdeff7; margin-bottom: 2px; background: #f6fbfc; color: #2564a3;}
-        input[readonly] {background: #f0f7fa; color: #8ca2b2;}
-        button { background: #4bb4fc; color: #fff; border: none; border-radius: 8px; padding: 13px 36px; font-weight: 600; cursor: pointer; margin: 0 4px; font-size:16px;}
-        .actions { text-align: center; margin-top: 25px;}
-        @media (max-width: 650px){ .row{flex-direction:column;} .container{padding:14px 4vw;} }
-    </style>
+  <meta charset="UTF-8">
+  <title>Options Strategy Generator</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(120deg, #f3fbff 0%, #d5f3e8 100%);
+      font-family: 'Inter', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      color: #233658;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .watermark {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7vw;
+      color: #117883;
+      opacity: 0.5;
+      font-weight: 900;
+      font-family: 'Inter', Arial, sans-serif;
+      letter-spacing: 0.27em;
+      user-select: none;
+      white-space: nowrap;
+      transform: rotate(-20deg) scale(1.2);
+      text-shadow: 1px 2px 16px #d4eee3;
+    }
+    header {
+      text-align: center;
+      padding: 32px 0 16px 0;
+      background: #effcff;
+      box-shadow: 0 4px 18px #b0e6db1a;
+      position: relative;
+      z-index: 2;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      color: #077880;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+    header p {
+      font-size: 1.1rem;
+      color: #2b699a;
+      margin: 12px 0 0 0;
+    }
+    .container {
+      max-width: 650px;
+      margin: 32px auto 36px auto;
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 8px 38px #86c0e924;
+      padding: 38px 30px 28px 30px;
+      position: relative;
+      z-index: 2;
+    }
+    form {
+      width: 100%;
+    }
+    .row {
+      display: flex;
+      gap: 22px;
+      margin-bottom: 19px;
+      flex-wrap: wrap;
+    }
+    .col {
+      flex: 1;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 7px;
+    }
+    label {
+      color: #229ebe;
+      font-weight: 600;
+      margin-bottom: 5px;
+      font-size: 1rem;
+    }
+    input, select {
+      font-size: 1.07rem;
+      border: 1.45px solid #bdeff9;
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: #f6fbfc;
+      color: #227773;
+      outline: none;
+      margin-bottom: 1px;
+      transition: border 0.18s;
+    }
+    input:focus, select:focus {
+      border-color: #44e7bc;
+      background: #ecfff7;
+    }
+    input[readonly] {
+      background: #eeeeee;
+      color: #82a2aa;
+    }
+    .actions {
+      text-align: center;
+      margin-top: 32px;
+    }
+    button {
+      background: linear-gradient(90deg, #44e7bc, #47bbff);
+      color: #fff;
+      font-size: 1.18rem;
+      font-family: inherit;
+      border-radius: 50px;
+      border: none;
+      padding: 15px 56px;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 6px 18px #79e7e722;
+      transition: background 0.18s, transform 0.13s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #3fd4ae, #2bb2f9);
+      transform: translateY(-2px) scale(1.025);
+    }
+    .note {
+      color: #128973;
+      font-size: 0.99rem;
+      margin: 3px 0 17px 0;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.97rem;
+      color: #47899a;
+      margin-top: 42px;
+      letter-spacing: 0.3px;
+      font-weight: 400;
+      z-index: 2;
+      position: relative;
+    }
+    .brand {
+      font-weight: 700;
+      color: #077880;
+      letter-spacing: 0.34px;
+      margin-left: 3px;
+    }
+    @media (max-width: 700px){
+      .container{padding:18px 2vw;}
+      .watermark {font-size: 13vw;}
+    }
+    @media (max-width: 550px){
+      .row{flex-direction:column;}
+      .container{padding:12px 0;}
+      header h1{font-size:2rem;}
+      .watermark {font-size: 18vw;}
+    }
+  </style>
 </head>
 <body>
+<div class="watermark">Credit Rajput</div>
+<header>
+  <h1>Options Strategy Generator</h1>
+  <p>Create robust option strategies and download them as a CSV instantly.</p>
+</header>
 <div class="container">
-    <h1>Options Strategy Generator</h1>
-    <form method="post" action="/generate">
-        <div class="row">
-            <div class="col">
-                <label for="legs">Legs</label>
-                <select id="legs" name="legs" onchange="updateLotSize()">
-                    <option value="2">2</option>
-                    <option value="3" selected>3</option>
-                    <option value="4">4</option>
-                </select>
-            </div>
-            <div class="col">
-                <label for="ratio">Ratio (e.g. 1.5.4)</label>
-                <input type="text" id="ratio" name="ratio" value="1.5.4" required onchange="updateLotSize()">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="script">Script</label>
-                <select id="script" name="script" onchange="updateStrikeFields();updateLotSize();">
-                    <option value="NIFTY">NIFTY</option>
-                    <option value="BANKNIFTY">BANKNIFTY</option>
-                    <option value="SENSEX">SENSEX</option>
-                    <option value="MIDCAP">MIDCAP</option>
-                    <option value="FINNIFTY">FINNIFTY</option>
-                </select>
-            </div>
-            <div class="col">
-                <label for="expiry">Expiry</label>
-                <input type="date" id="expiry" name="expiry" value="2025-08-07" required>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="firstStrikeCE">First Strike CE</label>
-                <input type="number" id="firstStrikeCE" name="firstStrikeCE" value="24100" required>
-            </div>
-            <div class="col">
-                <label for="firstStrikePE">First Strike PE</label>
-                <input type="number" id="firstStrikePE" name="firstStrikePE" value="25400" required>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="strikeStep">Strike Step</label>
-                <input type="number" id="strikeStep" name="strikeStep" value="50" required>
-            </div>
-            <div class="col">
-                <label for="legGap">Leg Gap (comma separated)</label>
-                <input type="text" id="legGap" name="legGap" value="250" required>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="totStrikes">Total Strike Rows</label>
-                <input type="number" id="totStrikes" name="totStrikes" value="10" required>
-            </div>
-            <div class="col">
-                <label for="buySellPattern">Buy/Sell Pattern (e.g. S.B.S)</label>
-                <input type="text" id="buySellPattern" name="buySellPattern" value="S.B.S" required>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="fileName">File Name</label>
-                <input type="text" id="fileName" name="fileName" value="NIFTY-strategy.csv">
-            </div>
-            <div class="col">
-                <label for="lotSize">Lot Size</label>
-                <input type="text" id="lotSize" name="lotSize" value="75" required readonly>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <label for="mode">Mode</label>
-                <select id="mode" name="mode" onchange="updateLotSize()">
-                    <option value="8184">8184</option>
-                    <option value="7155">7155</option>
-                    <option value="IOC">IOC</option>
-                </select>
-            </div>
-        </div>
-        <div class="actions">
-            <button type="submit">Download CSV</button>
-        </div>
-    </form>
-</div>
+  <form method="post" action="/generate">
+    <div class="note">Fields auto-update for your selected script and mode.</div>
 
-<!-- Script for strike/autofill and lot size -->
+    <div class="row">
+      <div class="col">
+        <label for="legs">Legs</label>
+        <select id="legs" name="legs" onchange="updateLotSize()">
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="ratio">Ratio (e.g. 1.5.4)</label>
+        <input type="text" id="ratio" name="ratio" value="1.5.4" required onchange="updateLotSize()">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="script">Script</label>
+        <select id="script" name="script" onchange="updateStrikeFields();updateLotSize();">
+          <option value="NIFTY">NIFTY</option>
+          <option value="BANKNIFTY">BANKNIFTY</option>
+          <option value="SENSEX">SENSEX</option>
+          <option value="MIDCAP">MIDCAP</option>
+          <option value="FINNIFTY">FINNIFTY</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="expiry">Expiry</label>
+        <input type="date" id="expiry" name="expiry" value="2025-08-07" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="firstStrikeCE">First Strike CE</label>
+        <input type="number" id="firstStrikeCE" name="firstStrikeCE" value="24100" required>
+      </div>
+      <div class="col">
+        <label for="firstStrikePE">First Strike PE</label>
+        <input type="number" id="firstStrikePE" name="firstStrikePE" value="25400" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="strikeStep">Strike Step</label>
+        <input type="number" id="strikeStep" name="strikeStep" value="50" required>
+      </div>
+      <div class="col">
+        <label for="legGap">Leg Gap (comma separated)</label>
+        <input type="text" id="legGap" name="legGap" value="250" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="totStrikes">Total Strike Rows</label>
+        <input type="number" id="totStrikes" name="totStrikes" value="10" required>
+      </div>
+      <div class="col">
+        <label for="buySellPattern">Buy/Sell Pattern (e.g. S.B.S)</label>
+        <input type="text" id="buySellPattern" name="buySellPattern" value="S.B.S" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="fileName">File Name</label>
+        <input type="text" id="fileName" name="fileName" value="NIFTY-strategy.csv">
+      </div>
+      <div class="col">
+        <label for="lotSize">Lot Size</label>
+        <input type="text" id="lotSize" name="lotSize" value="75" required readonly>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="mode">Mode</label>
+        <select id="mode" name="mode" onchange="updateLotSize()">
+          <option value="8184">8184</option>
+          <option value="7155">7155</option>
+          <option value="IOC">IOC</option>
+        </select>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="submit">Download CSV</button>
+    </div>
+  </form>
+</div>
+<footer>
+  &copy; 2025 <span class="brand">Options Strategy Generator</span>. Clean design by Perplexity AI.
+</footer>
 <script>
+// Auto-fills strike fields based on script selection
 function updateStrikeFields() {
     const script = document.getElementById('script').value;
     let ce = 24100, pe = 25400;
