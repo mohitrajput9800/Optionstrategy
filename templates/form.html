@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col">
                 <label for="legs">Legs</label>
-                <select id="legs" name="legs">
+                <select id="legs" name="legs" onchange="updateLotSize()">
                     <option value="2">2</option>
                     <option value="3" selected>3</option>
                     <option value="4">4</option>
@@ -33,13 +33,13 @@
             </div>
             <div class="col">
                 <label for="ratio">Ratio (e.g. 1.5.4)</label>
-                <input type="text" id="ratio" name="ratio" value="1.5.4" required>
+                <input type="text" id="ratio" name="ratio" value="1.5.4" required onchange="updateLotSize()">
             </div>
         </div>
         <div class="row">
             <div class="col">
                 <label for="script">Script</label>
-                <select id="script" name="script">
+                <select id="script" name="script" onchange="updateStrikeFields();updateLotSize();">
                     <option value="NIFTY">NIFTY</option>
                     <option value="BANKNIFTY">BANKNIFTY</option>
                     <option value="SENSEX">SENSEX</option>
@@ -89,14 +89,14 @@
             </div>
             <div class="col">
                 <label for="lotSize">Lot Size</label>
-                <input type="text" id="lotSize" name="lotSize" value="75" required>
+                <input type="text" id="lotSize" name="lotSize" value="75" required readonly>
             </div>
         </div>
         <div class="row">
             <div class="col">
                 <label for="mode">Mode</label>
-                <select id="mode" name="mode">
-                    <option value="8184" selected>8184</option>
+                <select id="mode" name="mode" onchange="updateLotSize()">
+                    <option value="8184">8184</option>
                     <option value="7155">7155</option>
                     <option value="IOC">IOC</option>
                 </select>
@@ -107,5 +107,41 @@
         </div>
     </form>
 </div>
+
+<!-- Script for strike/autofill and lot size -->
+<script>
+function updateStrikeFields() {
+    const script = document.getElementById('script').value;
+    let ce = 24100, pe = 25400;
+    if (script === "BANKNIFTY") { ce = 50000; pe = 49000; }
+    else if (script === "SENSEX") { ce = 80000; pe = 78000; }
+    else if (script === "MIDCAP") { ce = 12000; pe = 11000; }
+    else if (script === "FINNIFTY") { ce = 26000; pe = 25000; }
+    document.getElementById('firstStrikeCE').value = ce;
+    document.getElementById('firstStrikePE').value = pe;
+}
+function updateLotSize() {
+    const mode = document.getElementById('mode').value;
+    let ratio = document.getElementById('ratio').value;
+    let script = document.getElementById('script').value;
+    let lotPerScript = 75;
+    if (script === "BANKNIFTY") lotPerScript = 35;
+    else if (script === "SENSEX") lotPerScript = 20;
+    else if (script === "MIDCAP") lotPerScript = 140;
+    else if (script === "FINNIFTY") lotPerScript = 65;
+    let lotValue;
+    if (mode === "7155") {
+        let pieces = ratio.split('.').filter(x => x).length;
+        lotValue = Array(pieces).fill(lotPerScript).join('|');
+    } else {
+        lotValue = lotPerScript;
+    }
+    document.getElementById('lotSize').value = lotValue;
+}
+window.onload = function() {
+    updateStrikeFields();
+    updateLotSize();
+};
+</script>
 </body>
 </html>
