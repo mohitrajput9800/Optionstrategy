@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Clean Design By Rajput</title>
+  <title>Option Strategy Dashboard</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     body {
@@ -10,10 +10,30 @@
       min-height: 100vh;
       font-family: 'Inter', Arial, sans-serif;
       background: #171f2c;
-      position: relative;
       overflow-x: hidden;
     }
-    /* Stable Background */
+    /* Animated login background for login page only */
+    .animated-bg {
+      position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0;
+      background: linear-gradient(130deg, #67d1ff 0%, #2b5876 100%),
+        url("https://www.transparenttextures.com/patterns/cubes.png");
+      animation: bg-move 12s linear infinite alternate;
+      background-size: 250% 250%, auto;
+      opacity:0.92;
+      transition: opacity .5s;
+    }
+    @keyframes bg-move {
+      0% { background-position: 0 0, 0 0;}
+      100% { background-position: 60% 40%, 0 0;}
+    }
+    .fadein-card {
+      animation: fadein 1.3s cubic-bezier(.46,.03,.52,.96);
+    }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(40px) scale(1.02);}
+      to   { opacity: 1; transform: none;}
+    }
+    /* Trading chart background for dashboard only */
     .chart-bg {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -42,28 +62,6 @@
     @media (max-width:600px){
       .chart-bg::after{background-size:cover;}
     }
-    .watermark-rajput {
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) rotate(-14deg);
-      font-size: 3.8em;
-      color: #ffe487;
-      opacity: 0.12;
-      font-family: 'Inter', Arial, sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      pointer-events: none;
-      z-index: 2;
-      user-select: none;
-    }
-    @media (max-width:700px){
-      .watermark-rajput{font-size:2.2em;}
-    }
-    @media (max-width:500px){
-      .watermark-rajput{font-size:1.2em;}
-    }
-    /* Animated Logo */
     .logo-rajput-animated {
       position: fixed;
       left: 15px;
@@ -76,7 +74,7 @@
       justify-content: center;
       background: rgba(34,34,34,0.47);
       border-radius: 20px;
-      box-shadow: 0 4px 20px #ffe48769,0 0 0 3px #ffe48728;
+      box-shadow: 0 4px 20px #67d1ff79,0 0 0 3px #67d1ff31;
       padding: 9px;
       pointer-events: none;
       animation: pulse-glow 2.6s infinite;
@@ -88,21 +86,20 @@
       opacity: 1;
       background: transparent;
       border-radius: 14px;
-      box-shadow: 0 0 14px #ffd700aa,0 1px 22px #fffbe0bb, 0 0 0 #ffd700;
+      box-shadow: 0 0 14px #67d1ffb7, 0 1px 22px #d6f5ffb7, 0 0 0 #67d1ff;
       animation: logo-glow 2.6s infinite;
     }
     @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 4px 20px #ffe48769,0 0 0 3px #ffe48728;}
-      50%      { box-shadow: 0 2px 40px #ffd700d6,0 0 0 7px #ffd70038;}
+      0%, 100% { box-shadow: 0 4px 20px #67d1ff79,0 0 0 3px #67d1ff31;}
+      50%      { box-shadow: 0 2px 38px #67d1ffdd,0 0 0 7px #9ae9ff45;}
     }
     @keyframes logo-glow {
-      0%, 100% { box-shadow: 0 0 10px #ffd700aa,0 1px 16px #fffbe0bb; }
-      50%      { box-shadow: 0 0 44px #ffd700,0 2px 22px #fffaddbb; }
+      0%, 100% { box-shadow: 0 0 10px #67d1ffb7, 0 1px 16px #d6f5ffb7; }
+      50%      { box-shadow: 0 0 48px #67d1ff, 0 2px 22px #c0eaffcc; }
     }
     @media (max-width:600px){
       .logo-rajput-animated{width:36px;height:36px;left:6px;top:6px;padding:2px;}
     }
-    /* Date/Time and Ticker CSS */
     .datetime-bar {
       position: relative;
       z-index: 3;
@@ -121,15 +118,8 @@
       align-items: center;
       justify-content: center;
     }
-    /* Smaller date & time font */
-    #date-rajput {
-      font-size: 0.95em;
-      margin-bottom: 3px;
-    }
-    #time-rajput {
-      font-size: 1.08em;
-      letter-spacing: 0.05em;
-    }
+    #date-rajput { font-size: 0.95em; margin-bottom: 3px; }
+    #time-rajput { font-size: 1.08em; letter-spacing: 0.05em; }
     .ticker-bar {
       width: 100vw;
       overflow: hidden;
@@ -166,13 +156,12 @@
     .down{color:#e9176e;font-weight:700;}
     .idx-symbol{color:#227773;font-weight:700;font-size:1em;margin-right:6px;}
     @keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-53%);}}
-    /* Form/Container Styles */
     .container {
       max-width: 650px;
-      margin: 86px auto 36px auto;
+      margin: 90px auto 36px auto;
       background: #ffffffcc;
       border-radius: 24px;
-      box-shadow: 0 8px 38px #86c0e924;
+      box-shadow: 0 8px 38px #86c0e934;
       padding: 36px 24px 32px 24px;
       position: relative;
       z-index: 3;
@@ -267,19 +256,54 @@
   </style>
 </head>
 <body>
-  <!-- Animated Logo -->
+{% if not logged_in %}
+  <div class="animated-bg"></div>
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;">
+    <form class="fadein-card" action="/login" method="POST"
+      style="background:rgba(23,34,54,0.88);backdrop-filter:blur(9px);padding:40px 32px 35px 32px;border-radius:28px;
+        box-shadow:0 10px 44px #23325f60;max-width:355px;width:90vw;position:relative;
+        border:2.3px solid; border-image: linear-gradient(110deg,#67d1ff 0%,#36aebb 100%) 1;">
+      <div style="display:flex;justify-content:center;align-items:center;margin-bottom:16px;">
+        <span style="display:inline-block;width:53px;height:53px;border-radius:14px;
+          background:linear-gradient(132deg,#67d1ff 60%,#b2e5fa 100%);
+          box-shadow:0 7px 26px #67d1ff61,0 2px 6px #67d1ff33;">
+          <svg style="width:51px;height:51px;vertical-align:middle;" viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="29.5" stroke="#36aebb" stroke-width="3.5"/>
+            <path d="M32 18a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm0 17c7 0 13 3 13 8.5V50H19v-6.5C19 38 25 35 32 35z"
+                  fill="#67d1ff" stroke="#136ea8" stroke-width="1.5" />
+          </svg>
+        </span>
+      </div>
+      <h2 style="color:#54caff;text-align:center;margin:0 0 18px 0;font-family:'Inter',Arial,sans-serif;letter-spacing:0.10em;font-weight:800;">
+        Option Strategy Dashboard
+      </h2>
+      <input type="password" name="password" placeholder="Enter your password" autocomplete="off"
+        style="width:97%;margin-bottom:19px;font-size:1.13em;padding:14px 14px 12px 14px;border-radius:12px;
+        border:1.6px solid #93e5ff;background:rgba(255,255,255,0.06);color:#4db2e1;box-shadow:0 2px 8px #67d1ff16;">
+      <button type="submit"
+        style="width:100%;background:linear-gradient(90deg,#67d1ff 40%,#36aebb 100%);color:#fff;font-size:1.14em;
+        font-family:inherit;border-radius:15px;border:none;padding:12px 0;cursor:pointer;
+        font-weight:800;letter-spacing:0.08em;box-shadow:0 4px 16px #aeefff33;">
+        <span style="display:inline-block;vertical-align:middle;filter:drop-shadow(0 0 10px #67d1ff77);margin-right:4px;">🔒</span>
+        Login Securely
+      </button>
+      <div style="margin-top:12px;color:#eb5252;text-align:center;font-size:1.08em;min-height:1.2em;letter-spacing:0.09em;">
+        {{ error if error }}
+      </div>
+      <div style="margin-top:27px;text-align:center;color:#cde3f0;font-size:0.98em;letter-spacing:0.02em;">
+        For authorized users only.<br> Your session is private and encrypted.
+      </div>
+    </form>
+  </div>
+{% else %}
+  <div class="chart-bg"></div>
   <div class="logo-rajput-animated">
     <img src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/30a21fb5-200c-45ef-93b8-f5fdc17c0bd3.png" alt="Rajput Trading Logo">
   </div>
-  <!-- Chart Background & Watermark -->
-  <div class="chart-bg"></div>
-  <div class="watermark-rajput">Rajput</div>
-  <!-- Date/Time -->
   <div class="datetime-bar">
     <div id="date-rajput"></div>
     <div id="time-rajput"></div>
   </div>
-  <!-- Ticker -->
   <div class="ticker-bar" id="ticker">
     <div class="ticker-track">
       <div class="ticker-item"><span class="idx-symbol">NIFTY 50</span> <span class="index-value">24631.30</span> <span class="up">+80.40 (0.33%)</span></div>
@@ -289,8 +313,9 @@
       <div class="ticker-item"><span class="idx-symbol">MIDCAP</span> <span class="index-value">59721.21</span> <span class="up">+102.55 (0.17%)</span></div>
     </div>
   </div>
-  <!-- Form Container -->
+  <div style="margin-top:20px"></div>
   <div class="container">
+    <!-- Full option strategy form as before -->
     <form method="post" action="/generate">
       <div class="note">Fields auto-update for your selected script and mode.</div>
       <div class="row">
@@ -377,9 +402,12 @@
         <button type="submit">Download CSV</button>
       </div>
     </form>
+    <form action="/logout" method="post" style="margin-top:2em;">
+      <button type="submit" style="padding:9px 25px;border-radius:7px;background:#d6f5ff;color:#126793;font-weight:700;font-size:1.09em;border:none;">Logout</button>
+    </form>
   </div>
   <footer>
-    &copy; 2025 Clean Design By Rajput
+    &copy; 2025 Option Strategy Dashboard
   </footer>
   <script>
     function updateStrikeFields() {
@@ -410,7 +438,6 @@
       }
       document.getElementById('lotSize').value = lotValue;
     }
-    // Expiry field defaults to today
     function setExpiryToday() {
       var d = new Date();
       var yyyy = d.getFullYear();
@@ -431,9 +458,9 @@
       document.getElementById('time-rajput').textContent = time;
     }
     window.onload = function() {
-      setExpiryToday();
-      updateStrikeFields();
-      updateLotSize();
+      if (document.getElementById('expiry')) setExpiryToday();
+      if (document.getElementById('firstStrikeCE')) updateStrikeFields();
+      if (document.getElementById('lotSize')) updateLotSize();
       updateDateTimeVertical();
     };
     setInterval(updateDateTimeVertical, 1000);
@@ -464,7 +491,6 @@
       });
     }, 5000);
   </script>
+{% endif %}
 </body>
 </html>
-
-
