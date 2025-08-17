@@ -1,16 +1,39 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, session, redirect
 import io
 
 app = Flask(__name__)
 
-@app.route('/')
+app.secret_key = "YOUR_SUPER_SECRET_KEY"  # Change this to a strong random string!
+
+CORRECT_PASSWORD = "1486206"  # Change to your preferred password
+
+@app.route('/', methods=["GET"])
 def index():
-    # This requires "form.html" in your templates folder
-    return render_template('form.html')
+    error = session.pop("error", None)
+    logged_in = session.get("logged_in", False)
+    return render_template('form.html', error=error, logged_in=logged_in)
+
+@app.route("/login", methods=["POST"])
+def login():
+    password = request.form.get("password")
+    if password == CORRECT_PASSWORD:
+        session["logged_in"] = True
+        return redirect("/")
+    else:
+        session["error"] = "Wrong password. Try again."
+        return redirect("/")
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return redirect("/")
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    # Collect form data
+    # ONLY allow generation if logged in!
+    if not session.get("logged_in"):
+        return redirect("/")
+
     legs = int(request.form.get('legs', 3))
     ratio = request.form.get('ratio', '1.5.4')
     script = request.form.get('script', 'NIFTY').upper()
@@ -208,3 +231,4 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
