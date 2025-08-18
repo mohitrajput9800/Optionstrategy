@@ -1,13 +1,9 @@
-from flask import Flask, render_template, request, send_file, session, redirect
+from flask import Flask, render_template, request, send_file, session, redirect, abort
 import io
 
 app = Flask(__name__)
 
 app.secret_key = "YOUR_SUPER_SECRET_KEY"  # Change this to a strong random string!
-
-from flask import Flask, request, abort
-
-app = Flask(__name__)
 
 ALLOWED_IPS = [
     '103.42.89.54',   # e.g., '103.XX.XX.133'
@@ -255,6 +251,7 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
