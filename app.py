@@ -6,7 +6,6 @@ app = Flask(__name__)
 app.secret_key = "YOUR_SUPER_SECRET_KEY"  # Change this to a strong random string!
 
 ALLOWED_IPS = [
-    '121.0.0.0',      # localhost, always allowed for testing
     '103.42.89.54',   # Example: your laptop's LAN IPv4 (replace with your real one)
     # Add any other trusted IPs
 ]
@@ -246,6 +245,7 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
