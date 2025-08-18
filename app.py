@@ -3,24 +3,24 @@ import io
 
 app = Flask(__name__)
 app.secret_key = "YOUR_SUPER_SECRET_KEY"
-# app.secret_key = os.environ.get("SECRET_KEY", "Mohit_Problem_bhogesh")
+#/* app.secret_key = os.environ.get("SECRET_KEY", "Mohit_Problem_bhogesh")
 
 #ALLOWED_IPS = [
-#    '152.59.121.249',  # Your public IP seen in logs
-#    '103.42.89.54'
+ #   '152.59.121.249',  # Your public IP seen in logs
+  #  '103.42.89.54'
 #]
 
 #def get_remote_ip():
  #   if 'X-Forwarded-For' in request.headers:
   #      return request.headers['X-Forwarded-For'].split(',')[0].strip()
-  #  return request.remote_addr
+   # return request.remote_addr
 
 #@app.before_request
 #def limit_ip():
-#    ip = get_remote_ip()
- #   print("Visitor IP seen:", ip)
- #   if ip not in ALLOWED_IPS:
-  #      abort(403) */
+ #   ip = get_remote_ip()
+  #  print("Visitor IP seen:", ip)
+   # if ip not in ALLOWED_IPS:
+    #    abort(403) */
 CORRECT_PASSWORD = "1486206"  # Change to your preferred password
 
 @app.route('/', methods=["GET"])
@@ -50,7 +50,15 @@ def generate():
     if not session.get("logged_in"):
         return redirect("/")
 
-    legs = int(request.form.get('legs', 3))
+ # ------ Robustly parse all form values ------
+    # This new way prevents crashes if fields are empty
+    def get_int_from_form(field_name, default_value):
+        value = request.form.get(field_name, str(default_value))
+        if value and value.isdigit():
+            return int(value)
+        return default_value
+
+    legs = get_int_from_form('legs', 3)
     ratio = request.form.get('ratio', '1.5.4')
     script = request.form.get('script', 'NIFTY').upper()
     expiry_raw = request.form.get('expiry', '')
@@ -62,9 +70,11 @@ def generate():
     buySellPattern = request.form.get('buySellPattern', 'S.B.S').upper()
     fileName = request.form.get('fileName') or f"{script}-strategy.csv"
     lotSize = request.form.get('lotSize', '75')
-    mode = request.form.get('mode', '8184')  # '8184', '7155', or 'IOC'
+    mode = request.form.get('mode', '8184')
 
-    # CALCULATE lotSize (do not trust user-provided value)
+    # SENSEX mapping for script column
+    csv_script = 'BSX' if script == 'SENSEX' else script
+
     legsArr = ratio.split('.')
     legCount = len(legsArr)
     if script == "BANKNIFTY":
@@ -78,7 +88,11 @@ def generate():
     else:
         lot_per_script = 75
 
-    if mode == "7155":
+     # Lot size special logic: SENSEX+7155 → legs*legs, else old way
+    if mode == "7155" and script == "SENSEX":
+        num_lots = 4 * legs
+        lotSize = "|".join([str(lot_per_script)] * num_lots)
+    elif mode == "7155":
         lotSize = "|".join([str(lot_per_script)] * legCount)
     else:
         lotSize = str(lot_per_script)
@@ -139,7 +153,7 @@ def generate():
                 row[0] = str(pid)
                 pid += 1
                 row[5] = str(stgCode)
-                row[6] = script
+                row[6] = csv_script
                 row[7] = lotSize
                 row[8] = '-'.join(['OPTIDX'] * legCount)
                 row[9] = expStr
@@ -191,7 +205,7 @@ def generate():
                 row[0] = str(pid)
                 pid += 1
                 row[5] = str(stgCode)
-                row[6] = script
+                row[6] = csv_script
                 row[7] = lotSize
                 row[8] = '-'.join(['OPTIDX'] * legCount)
                 row[9] = expStr
@@ -247,7 +261,6 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
 
 
 
