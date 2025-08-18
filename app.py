@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 ALLOWED_IPS = [
     '103.42.89.54',   # e.g., '103.XX.XX.133'
+    '192.168.0.104'
 ]
 
 def get_remote_ip():
@@ -254,6 +255,7 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
