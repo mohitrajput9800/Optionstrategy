@@ -157,7 +157,7 @@ def generate():
                 row[30] = '50' if mode == "IOC" else '200'
                 row[31] = '2'
                 row[32] = '1'
-                row[33] = '0' if mode == "IOC" else '1'
+                row[33] = 'FALSE' if mode == "IOC" else 'TRUE'
                 row[34] = '5'
                 row[37] = '2'
                 row[38] = '1'
@@ -209,7 +209,7 @@ def generate():
                 row[30] = '50' if mode == "IOC" else '200'
                 row[31] = '2'
                 row[32] = '1'
-                row[33] = '0' if mode == "IOC" else '1'
+                row[33] = 'FALSE' if mode == "IOC" else 'TRUE'
                 row[34] = '5'
                 row[37] = '2'
                 row[38] = '1'
@@ -247,6 +247,7 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
