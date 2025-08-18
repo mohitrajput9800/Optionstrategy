@@ -1,27 +1,26 @@
-import os
 from flask import Flask, render_template, request, send_file, session, redirect, abort
 import io
 
 app = Flask(__name__)
+app.secret_key = "YOUR_SUPER_SECRET_KEY"
+# app.secret_key = os.environ.get("SECRET_KEY", "Mohit_Problem_bhogesh")
 
-app.secret_key = os.environ.get("SECRET_KEY", "Mohit_Problem_bhogesh")
+#ALLOWED_IPS = [
+#    '152.59.121.249',  # Your public IP seen in logs
+#    '103.42.89.54'
+#]
 
-ALLOWED_IPS = [
-    '152.59.121.249',  # Your public IP seen in logs
-    '103.42.89.54'
-]
+#def get_remote_ip():
+ #   if 'X-Forwarded-For' in request.headers:
+  #      return request.headers['X-Forwarded-For'].split(',')[0].strip()
+  #  return request.remote_addr
 
-def get_remote_ip():
-    if 'X-Forwarded-For' in request.headers:
-        return request.headers['X-Forwarded-For'].split(',')[0].strip()
-    return request.remote_addr
-
-@app.before_request
-def limit_ip():
-    ip = get_remote_ip()
-    print("Visitor IP seen:", ip)
-    if ip not in ALLOWED_IPS:
-        abort(403)
+#@app.before_request
+#def limit_ip():
+#    ip = get_remote_ip()
+ #   print("Visitor IP seen:", ip)
+ #   if ip not in ALLOWED_IPS:
+  #      abort(403) */
 CORRECT_PASSWORD = "1486206"  # Change to your preferred password
 
 @app.route('/', methods=["GET"])
@@ -248,6 +247,7 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
