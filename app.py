@@ -5,6 +5,21 @@ app = Flask(__name__)
 
 app.secret_key = "YOUR_SUPER_SECRET_KEY"  # Change this to a strong random string!
 
+ALLOWED_IPS = [
+    '127.0.0.1',      # localhost, always allowed for testing
+    '192.168.0.12',   # Example: your laptop's LAN IPv4 (replace with your real one)
+    # Add any other trusted IPs
+]
+
+@app.before_request
+def limit_ip():
+    if request.remote_addr not in ALLOWED_IPS:
+        abort(403)
+
+@app.errorhandler(403)
+def forbidden(e):
+    return "<h2 style='color:red;margin-top:80px;text-align:center'>Access Denied: Your IP is not allowed.</h2>", 403
+
 CORRECT_PASSWORD = "1486206"  # Change to your preferred password
 
 @app.route('/', methods=["GET"])
