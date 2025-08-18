@@ -3,11 +3,11 @@ import io
 
 app = Flask(__name__)
 
-app.secret_key = "YOUR_SUPER_SECRET_KEY"  # Change this to a strong random string!
+app.secret_key = os.environ.get("SECRET_KEY", "Mohit_Problem_bhogesh")
 
 ALLOWED_IPS = [
-    '103.42.89.54',   # e.g., '103.XX.XX.133'
-    '152.59.121.249'
+    '152.59.121.249',  # Your public IP seen in logs
+    '103.42.89.54'
 ]
 
 def get_remote_ip():
@@ -17,14 +17,10 @@ def get_remote_ip():
 
 @app.before_request
 def limit_ip():
-    client_ip = get_remote_ip()
-    print('Visitor IP seen:', client_ip)
-    if client_ip not in ALLOWED_IPS:
+    ip = get_remote_ip()
+    print("Visitor IP seen:", ip)
+    if ip not in ALLOWED_IPS:
         abort(403)
-
-@app.errorhandler(403)
-def forbidden(e):
-    return "<h2 style='color:red;margin-top:80px;text-align:center'>Access Denied: Your IP is not allowed.</h2>", 403
 CORRECT_PASSWORD = "1486206"  # Change to your preferred password
 
 @app.route('/', methods=["GET"])
@@ -251,6 +247,7 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
