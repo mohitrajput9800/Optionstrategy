@@ -21,7 +21,7 @@ app.secret_key = "YOUR_SUPER_SECRET_KEY"
   #  print("Visitor IP seen:", ip)
    # if ip not in ALLOWED_IPS:
     #    abort(403) */
-CORRECT_PASSWORD = "1486206"  # Change to your preferred password
+CORRECT_PASSWORD = "310815"  # Change to your preferred password
 
 @app.route('/', methods=["GET"])
 def index():
@@ -261,6 +261,7 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
