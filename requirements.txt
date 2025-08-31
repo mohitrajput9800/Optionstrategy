@@ -52,4 +52,4 @@ websockets==15.0.1
 Werkzeug==2.2.2
 WTForms==3.0.1
 yfinance==0.2.65
-yt-dlp==2025.6.25
+psycopg2-binary
