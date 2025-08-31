@@ -1,0 +1,14 @@
+# .gitignore file
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+
+# Database file
+users.db
+
+# Secrets file
+.env
