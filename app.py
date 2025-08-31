@@ -16,10 +16,7 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "a-default-safe-key-for-development")
 INVITATION_CODE = "BIJNOR24"
-# This line finds the Render data directory, or uses the local folder if not on Render
-data_dir = os.environ.get('RENDER_DATA_DIR', os.path.dirname(os.path.abspath(__file__)))
-# The new database path
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(data_dir, 'users.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -260,3 +257,4 @@ def generate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
